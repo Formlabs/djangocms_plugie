@@ -3,7 +3,7 @@ from cms.models import CMSPlugin
 from django.contrib import messages
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from djangocms_plugie.exporter import Exporter
 from djangocms_plugie.forms import PluginImporterForm, ImportForm
@@ -23,8 +23,6 @@ def export_component_data(request, component_type, component_id):
         'version': version,
         'all_plugins': all_plugins,
     }
-
-    messages.success(request, 'Plugin tree exported successfully!')
 
     response = HttpResponse(json.dumps(data, indent=4, sort_keys=True),
                             content_type="application/json")
@@ -82,5 +80,4 @@ def import_component_data(request, component_type, component_id):
         import_form.add_error("import_file", str(e))
         return render(request, "djangocms_plugie/import_plugins.html", context)
 
-    # TODO: Fix this redirect. It should close the modal and refresh the page.
-    return redirect('admin:index')
+    return render(request, "djangocms_plugie/refresh_page.html")
