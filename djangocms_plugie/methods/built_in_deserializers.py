@@ -31,7 +31,11 @@ def deserialize_manyrelatedmanager(instance, importer, **kwargs):
 
 
 def register_deserializers(importer):
-    importer.method_map['relatedmanager'] = lambda instance, **kwargs: deserialize_relatedmanager(
-        instance, importer, **kwargs)
-    importer.method_map['manyrelatedmanager'] = lambda instance, **kwargs: deserialize_manyrelatedmanager(
-        instance, importer, **kwargs)
+    def relatedmanager_deserializer(instance, **kwargs):
+        return deserialize_relatedmanager(instance, importer, **kwargs)
+
+    def manyrelatedmanager_deserializer(instance, **kwargs):
+        return deserialize_manyrelatedmanager(instance, importer, **kwargs)
+
+    importer.method_map['relatedmanager'] = relatedmanager_deserializer
+    importer.method_map['manyrelatedmanager'] = manyrelatedmanager_deserializer

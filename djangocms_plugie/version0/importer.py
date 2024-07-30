@@ -40,7 +40,9 @@ class Importer:
             new_plugin = self.create_new_plugin(plugin_context)
 
             plugin_map[plugin_context.source_id] = {
-                "plugin": new_plugin, "original_position": plugin_context.position}
+                "plugin": new_plugin,
+                "original_position": plugin_context.position
+            }
         return plugin_map
 
     def create_plugin_context(self, plugin_fields, data, plugin_map):
@@ -54,7 +56,8 @@ class Importer:
             plugin_context.increment_position_by(num_children_in_target)
             plugin_context.validate_root_plugin()
         else:
-            plugin_context.target_plugin = plugin_map[plugin_context.parent_id]["plugin"]
+            target_plugin = plugin_map[plugin_context.parent_id]["plugin"]
+            plugin_context.target_plugin = target_plugin
 
         return plugin_context
 
@@ -69,7 +72,13 @@ class Importer:
         if not plugins:
             return plugins
 
-        return sorted(plugins, key=lambda p: (p.get("meta").get("depth", 1), p.get("meta").get("position", 0)))
+        return sorted(
+            plugins,
+            key=lambda p: (
+                p.get("meta").get("depth", 1),
+                p.get("meta").get("position", 0)
+            )
+        )
 
     @staticmethod
     def fix_plugin_tree(plugin_map):
@@ -86,7 +95,11 @@ class Importer:
     def get_num_children_in_target(data):
         target = data.get('plugin')
         if target:
-            return target.get_descendants().filter(depth=target.depth + 1).count()
+            descendants = target.get_descendants()
+            filtered_descendants = descendants.filter(
+                depth=target.depth + 1
+            )
+            return filtered_descendants.count()
 
         target = data.get('placeholder')
         if target:

@@ -26,12 +26,15 @@ def _get_importer(version):
     except ImportError as e:
         logger.error(f"Error importing module: {e}")
         raise ImportError(
-            f"It was not possible to import the importer for version {str(version)}. Check if the version exists or if \
-            the module is correctly implemented.")
+            f"It was not possible to import the importer for \
+                version {str(version)}. Check if the version \
+                exists or if the module is correctly implemented."
+        )
     except AttributeError as e:
         logger.error(f"Error importing class: {e}")
         raise AttributeError(
-            f"File version must be in the format 'x.y.z', where x is the major version. Got: {str(version)}")
+            f"File version must be in the format 'x.y.z', where x is the \
+                major version. Got: {str(version)}")
 
 
 class PluginImporterForm(forms.Form):
@@ -80,15 +83,21 @@ class ImportForm(PluginImporterForm):
 
         try:
             data = _get_parsed_data(import_file)
-            if not isinstance(data, dict) or "version" not in data or "all_plugins" not in data:
+            if not isinstance(data, dict) or \
+                "version" not in data or \
+                    "all_plugins" not in data:
                 raise ValidationError(
-                    "File is not valid: the Import file must be a dictionary with keys 'version' and 'all_plugins'")
+                    "File is not valid: the Import file must be a dictionary "
+                    "with keys 'version' and 'all_plugins'")
 
             version = data.get("version")
             # TODO: refactor this validation
-            if not version or not isinstance(version, str) or len(version.split(".")) != 3:
+            if not version or \
+                not isinstance(version, str) or \
+                    len(version.split(".")) != 3:
                 raise ValidationError(
-                    "File is not valid: 'version' is not a string with format 'x.y.z'")
+                    "File is not valid: 'version' is not a string with format"
+                    "'x.y.z'")
 
             all_plugins = data.get("all_plugins")
             if not all_plugins or not isinstance(all_plugins, list):
@@ -105,13 +114,15 @@ class ImportForm(PluginImporterForm):
                 meta = plugin.get("meta")
                 if not isinstance(meta, dict):
                     raise ValidationError(
-                        "File is not valid: the 'meta' value in a plugin is not a dictionary")
+                        "File is not valid: the 'meta' value in a plugin is \
+                            not a dictionary")
 
                 missing_keys = required_meta_keys - set(meta.keys())
 
                 if missing_keys:
                     raise ValidationError(
-                        "File is not valid: a plugin is missing required keys in 'meta': %(keys)s",
+                        "File is not valid: a plugin is missing required keys \
+                            in 'meta': %(keys)s",
                         code='missing_keys', params={"keys": missing_keys})
 
         except (ValueError, TypeError, AttributeError) as e:

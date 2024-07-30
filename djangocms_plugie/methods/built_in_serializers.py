@@ -44,13 +44,23 @@ def serialize_dict(instance, loader):
 
 
 def register_serializers(loader):
-    loader.method_map['list'] = lambda instance: serialize_list(
-        instance, loader)
-    loader.method_map['msflist'] = lambda instance: serialize_list(
-        instance, loader)
-    loader.method_map['dict'] = lambda instance: serialize_dict(
-        instance, loader)
-    loader.method_map['relatedmanager'] = lambda instance: serialize_relatedmanager(
-        instance, loader)
-    loader.method_map['manyrelatedmanager'] = lambda instance: serialize_manyrelatedmanager(
-        instance, loader)
+    def list_serializer(instance):
+        return serialize_list(instance, loader)
+
+    def msflist_serializer(instance):
+        return serialize_list(instance, loader)
+
+    def dict_serializer(instance):
+        return serialize_dict(instance, loader)
+
+    def relatedmanager_serializer(instance):
+        return serialize_relatedmanager(instance, loader)
+
+    def manyrelatedmanager_serializer(instance):
+        return serialize_manyrelatedmanager(instance, loader)
+
+    loader.method_map['list'] = list_serializer
+    loader.method_map['msflist'] = msflist_serializer
+    loader.method_map['dict'] = dict_serializer
+    loader.method_map['relatedmanager'] = relatedmanager_serializer
+    loader.method_map['manyrelatedmanager'] = manyrelatedmanager_serializer

@@ -78,7 +78,13 @@ def import_component_data(request, component_type, component_id):
         import_form.run_import()
         messages.success(request, 'Plugin tree imported successfully!')
     # TODO: refactor these errors
-    except (TypeError, IntegrityError, ValueError, ImportError, AttributeError) as e:
+    except (
+        TypeError,
+        IntegrityError,
+        ValueError,
+        ImportError,
+        AttributeError
+    ) as e:
         import_form.add_error("import_file", str(e))
         return render(request, "djangocms_plugie/import_plugins.html", context)
 

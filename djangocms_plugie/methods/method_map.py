@@ -3,8 +3,10 @@ import importlib.util
 import inspect
 import logging
 from djangocms_plugie.methods.method_base import MethodBase
-from djangocms_plugie.methods.built_in_deserializers import register_deserializers
-from djangocms_plugie.methods.built_in_serializers import register_serializers
+from djangocms_plugie.methods.built_in_deserializers \
+    import register_deserializers
+from djangocms_plugie.methods.built_in_serializers \
+    import register_serializers
 
 
 logger = logging.getLogger(__name__)
@@ -13,7 +15,11 @@ CUSTOM_METHODS_PATH = os.path.join(CURRENT_DIR, 'custom_methods')
 
 
 class MethodMapBase:
-    def __init__(self, method_name=None, custom_methods_path=CUSTOM_METHODS_PATH):
+    def __init__(
+            self,
+            method_name=None,
+            custom_methods_path=CUSTOM_METHODS_PATH
+    ):
         self.method_map = {}
         self.method_name = method_name
         self.custom_methods_path = custom_methods_path
@@ -39,11 +45,15 @@ class MethodMapBase:
                         continue
 
                     for _, obj in inspect.getmembers(module, inspect.isclass):
-                        if issubclass(obj, MethodBase) and obj is not MethodBase:
+                        if (
+                            issubclass(obj, MethodBase) and
+                            obj is not MethodBase
+                        ):
                             for type_name in obj().type_names:
                                 if type_name in self.method_map:
                                     logger.info(
-                                        f"Overriding {method_name} for {type_name} with {module_name}")
+                                        f"Overriding {method_name} for \
+                                        {type_name} with {module_name}")
                                 self.method_map[type_name] = getattr(
                                     obj, method_name)
 

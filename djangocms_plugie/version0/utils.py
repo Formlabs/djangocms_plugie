@@ -9,8 +9,11 @@ def handle_special_plugin_fields(plugin_fields, plugin_id, method_map):
             fields[field_name] = field_value
             continue
 
-        extra_kwargs = {key: value for key, value in field_value.items() if key.startswith('_')
-                        and key not in ['_type', '_data']}
+        extra_kwargs = {
+            key: value for key, value in field_value.items()
+            if key.startswith('_')
+            and key not in ['_type', '_data']
+        }
         extra_kwargs['_plugin_id'] = plugin_id
         value = get_deserialized_value(field_value, method_map, **extra_kwargs)
         fields[field_name] = value

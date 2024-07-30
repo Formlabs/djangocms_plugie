@@ -37,7 +37,10 @@ class PluginContext:
 
     @property
     def non_meta_fields(self):
-        return {key: value for key, value in self.plugin_fields.items() if key != "meta"}
+        return {
+            key: value for key, value in self.plugin_fields.items()
+            if key != "meta"
+        }
 
     @property
     def parent_id(self):
@@ -59,10 +62,14 @@ class PluginContext:
         child_type = self.plugin_type
         if not self._is_valid_child(parent_plugin, child_type):
             raise TypeError(
-                f"Plugin type {child_type} is not allowed as a child of {getattr(parent_plugin, 'plugin_type', None)}")
+                f"Plugin type {child_type} is not allowed as a child \
+                    of {getattr(parent_plugin, 'plugin_type', None)}"
+            )
         if not self._is_valid_parent(parent_plugin, child_type):
             raise TypeError(
-                f"Plugin {child_type} requires a parent of type {self._get_allowed_parents(child_type)}")
+                f"Plugin {child_type} requires a parent of \
+                type {self._get_allowed_parents(child_type)}"
+            )
 
     def _is_valid_child(self, parent_plugin, child_type):
         allowed_children = self._get_allowed_children(parent_plugin)
@@ -70,7 +77,8 @@ class PluginContext:
 
     def _is_valid_parent(self, parent_plugin, child_type):
         allowed_parents = self._get_allowed_parents(child_type)
-        return allowed_parents is None or getattr(parent_plugin, 'plugin_type', None) in allowed_parents
+        return allowed_parents is None or \
+            getattr(parent_plugin, 'plugin_type', None) in allowed_parents
 
     @staticmethod
     def _get_allowed_children(plugin):
@@ -109,7 +117,9 @@ class PluginContext:
             new_plugin = self._add_plugin(**processed_initial_fields)
 
             remaining_fields = {
-                key: value for key, value in non_meta_fields.items() if key not in initial_fields}
+                key: value for key, value in non_meta_fields.items()
+                if key not in initial_fields
+            }
             if remaining_fields:
                 new_plugin = self._update_new_plugin(
                     new_plugin, remaining_fields, method_map)
@@ -122,15 +132,23 @@ class PluginContext:
         plugin_type = self.meta.get("plugin_type")
         language = self.meta.get("language", 'en')
         try:
-            return add_plugin(placeholder, plugin_type, language, target=target, **kwargs)
+            return add_plugin(
+                placeholder,
+                plugin_type,
+                language,
+                target=target,
+                **kwargs
+            )
         except TypeError as e:
             logger.exception(e)
             raise TypeError(
                 f"A plugin can't be imported. Plugin: {plugin_type}")
         except IntegrityError as e:
             logger.exception(e)
-            raise IntegrityError(f"Plugin data is not valid or is missing required fields. Plugin: \
-                                {plugin_type}. Error: {e}")
+            raise IntegrityError(
+                f"Plugin data is not valid or is missing required fields. \
+                Plugin: {plugin_type}. Error: {e}"
+            )
 
     @staticmethod
     def _get_initial_fields(plugin_fields, plugin_model):
