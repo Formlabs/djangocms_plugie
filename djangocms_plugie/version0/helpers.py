@@ -21,7 +21,8 @@ class PluginContext:
             return plugin_model
         except Exception as e:
             logger.exception(e)
-            raise TypeError(f"A plugin doesn't exist. Plugin: {self.plugin_type}")
+            raise TypeError(
+                f"A plugin doesn't exist. Plugin: {self.plugin_type}")
 
     @property
     def plugin_type(self):
@@ -99,15 +100,19 @@ class PluginContext:
     def create_plugin(self, method_map):
         non_meta_fields = self.non_meta_fields
         plugin_model = self.plugin_model
-        initial_fields = self._get_initial_fields(non_meta_fields, plugin_model)
-        processed_initial_fields = handle_special_plugin_fields(initial_fields, None, method_map)
+        initial_fields = self._get_initial_fields(
+            non_meta_fields, plugin_model)
+        processed_initial_fields = handle_special_plugin_fields(
+            initial_fields, None, method_map)
 
         with transaction.atomic():
             new_plugin = self._add_plugin(**processed_initial_fields)
 
-            remaining_fields = {key: value for key, value in non_meta_fields.items() if key not in initial_fields}
+            remaining_fields = {
+                key: value for key, value in non_meta_fields.items() if key not in initial_fields}
             if remaining_fields:
-                new_plugin = self._update_new_plugin(new_plugin, remaining_fields, method_map)
+                new_plugin = self._update_new_plugin(
+                    new_plugin, remaining_fields, method_map)
 
             return new_plugin
 
@@ -120,7 +125,8 @@ class PluginContext:
             return add_plugin(placeholder, plugin_type, language, target=target, **kwargs)
         except TypeError as e:
             logger.exception(e)
-            raise TypeError(f"A plugin can't be imported. Plugin: {plugin_type}")
+            raise TypeError(
+                f"A plugin can't be imported. Plugin: {plugin_type}")
         except IntegrityError as e:
             logger.exception(e)
             raise IntegrityError(f"Plugin data is not valid or is missing required fields. Plugin: \
@@ -142,8 +148,10 @@ class PluginContext:
         return initial_fields
 
     def _update_new_plugin(self, instance, fields, method_map):
-        deserialized_fields = handle_special_plugin_fields(fields, instance.id, method_map)
-        updated_instance = self._update_plugin_fields(instance, deserialized_fields)
+        deserialized_fields = handle_special_plugin_fields(
+            fields, instance.id, method_map)
+        updated_instance = self._update_plugin_fields(
+            instance, deserialized_fields)
         return updated_instance
 
     def _update_plugin_fields(self, instance, fields):

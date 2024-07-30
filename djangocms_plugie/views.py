@@ -36,9 +36,11 @@ def get_plugin_tree(component_type, component_id):
     if not component_type or not component_id:
         raise ValueError('Component type and ID must be provided.')
 
-    filter_criteria = {'id': component_id} if component_type == 'plugin' else {'placeholder_id': component_id}
+    filter_criteria = {'id': component_id} if component_type == 'plugin' else {
+        'placeholder_id': component_id}
     parent_queryset = CMSPlugin.objects.filter(**filter_criteria)
-    descendants = parent_queryset[0].get_descendants() if component_type == 'plugin' else CMSPlugin.objects.none()
+    descendants = parent_queryset[0].get_descendants(
+    ) if component_type == 'plugin' else CMSPlugin.objects.none()
     plugin_tree = parent_queryset | descendants
 
     return plugin_tree

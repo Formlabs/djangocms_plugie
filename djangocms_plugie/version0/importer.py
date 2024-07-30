@@ -1,20 +1,10 @@
 import logging
-import requests
-from django.apps import apps
-from djangocms_plugie.version0.utils import handle_special_plugin_fields
+
 from djangocms_plugie.version0.helpers import PluginContext
+from djangocms_plugie.methods.method_map import ImporterMethodMap
 
 
 logger = logging.getLogger(__name__)
-
-
-class HttpClient:
-    def get(self, url, **kwargs):
-        return requests.get(url, **kwargs)
-
-    @property
-    def exceptions(self):
-        return requests.exceptions
 
 
 class Logger:
@@ -26,17 +16,12 @@ class Logger:
 
 
 class Importer:
-    def __init__(self, http_client=None, logger=None):
-        self.http_client = http_client or HttpClient()
+    def __init__(self, logger=None):
         self.logger = logger or Logger()
         self.version = "0.2.0"
-        self.method_map = {
-            'inline': self._import_inline,
-            'parent_related_field': self._import_parent_related_field,
-            'manyrelatedmanager': self._import_many_related_manager,
-        }
+        self.method_map = ImporterMethodMap()
         self.dummy_plugins = [
-            # e.g.: 'Module',
+            'Module',
         ]
 
     def import_plugins_to_target(self, data):
@@ -50,10 +35,12 @@ class Importer:
         plugin_map = {}
 
         for plugin_fields in sorted_plugins:
-            plugin_context = self.create_plugin_context(plugin_fields, data, plugin_map)
+            plugin_context = self.create_plugin_context(
+                plugin_fields, data, plugin_map)
             new_plugin = self.create_new_plugin(plugin_context)
 
-            plugin_map[plugin_context.source_id] = {"plugin": new_plugin, "original_position": plugin_context.position}
+            plugin_map[plugin_context.source_id] = {
+                "plugin": new_plugin, "original_position": plugin_context.position}
         return plugin_map
 
     def create_plugin_context(self, plugin_fields, data, plugin_map):
@@ -75,14 +62,14 @@ class Importer:
         if plugin_context.plugin_type in self.dummy_plugins:
             return plugin_context.create_dummy_plugin()
         else:
-            return plugin_context.create_plugin(self.method_map)
+            return plugin_context.create_plugin(self.method_map.method_map)
 
     @staticmethod
     def sort_plugins_by_depth(plugins):
         if not plugins:
             return plugins
 
-        return sorted(plugins, key=lambda p: p.get("meta").get("depth", 1))
+        return sorted(plugins, key=lambda p: (p.get("meta").get("depth", 1), p.get("meta").get("position", 0)))
 
     @staticmethod
     def fix_plugin_tree(plugin_map):
@@ -106,31 +93,3 @@ class Importer:
             return target.get_plugins().filter(parent__isnull=True).count()
 
         raise ValueError("Target plugin or placeholder is not defined")
-
-    def _import_inline(self, data, **kwargs):
-        model_label = kwargs.get('_model_label', None)
-        plugin = kwargs.get('_plugin_id', None)
-        created_instances = []
-        if model_label is not None and plugin is not None:
-            model_class = apps.get_model(*model_label.split('.'))
-            for instance_data in data:
-                instance_data.pop('meta', None)
-                processed_fields = handle_special_plugin_fields(instance_data, plugin, self.method_map)
-                model_instance = model_class.objects.create(**processed_fields)
-                model_instance.save()
-                created_instances.append(model_instance)
-
-        return created_instances
-
-    def _import_many_related_manager(self, data, **kwargs):
-        instances = []
-        plugin_id = kwargs.get('_plugin_id', None)
-        for instance_data in data:
-            fields = {'key': instance_data}
-            processed_fields = handle_special_plugin_fields(fields, plugin_id, self.method_map)
-            instances.append(processed_fields['key'])
-        return instances
-
-    def _import_parent_related_field(self, _, **kwargs):
-        plugin = kwargs.get('_plugin_id', None)
-        return plugin

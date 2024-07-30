@@ -59,7 +59,8 @@ class PluginImporterForm(forms.Form):
 
         if plugin:
             plugin_model = plugin.get_plugin_class().model
-            plugin_is_bound = plugin_model.objects.filter(cmsplugin_ptr=plugin).exists()
+            plugin_is_bound = plugin_model.objects.filter(
+                cmsplugin_ptr=plugin).exists()
         else:
             plugin_is_bound = False
 
@@ -86,20 +87,25 @@ class ImportForm(PluginImporterForm):
             version = data.get("version")
             # TODO: refactor this validation
             if not version or not isinstance(version, str) or len(version.split(".")) != 3:
-                raise ValidationError("File is not valid: 'version' is not a string with format 'x.y.z'")
+                raise ValidationError(
+                    "File is not valid: 'version' is not a string with format 'x.y.z'")
 
             all_plugins = data.get("all_plugins")
             if not all_plugins or not isinstance(all_plugins, list):
-                raise ValidationError("File is not valid: missing 'all_plugins'")
+                raise ValidationError(
+                    "File is not valid: missing 'all_plugins'")
 
-            required_meta_keys = {"parent", "id", "position", "plugin_type", "depth"}
+            required_meta_keys = {"parent", "id",
+                                  "position", "plugin_type", "depth"}
             for plugin in all_plugins:
                 if "meta" not in plugin:
-                    raise ValidationError("File is not valid: a plugin is missing 'meta' key")
+                    raise ValidationError(
+                        "File is not valid: a plugin is missing 'meta' key")
 
                 meta = plugin.get("meta")
                 if not isinstance(meta, dict):
-                    raise ValidationError("File is not valid: the 'meta' value in a plugin is not a dictionary")
+                    raise ValidationError(
+                        "File is not valid: the 'meta' value in a plugin is not a dictionary")
 
                 missing_keys = required_meta_keys - set(meta.keys())
 
