@@ -1,7 +1,6 @@
 import json
 from cms.models import CMSPlugin
 from django.contrib import messages
-from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -77,14 +76,7 @@ def import_component_data(request, component_type, component_id):
     try:
         import_form.run_import()
         messages.success(request, 'Plugin tree imported successfully!')
-    # TODO: refactor these errors
-    except (
-        TypeError,
-        IntegrityError,
-        ValueError,
-        ImportError,
-        AttributeError
-    ) as e:
+    except Exception as e:
         import_form.add_error("import_file", str(e))
         return render(request, "djangocms_plugie/import_plugins.html", context)
 

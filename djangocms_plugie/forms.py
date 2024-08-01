@@ -22,7 +22,13 @@ def _get_importer(version):
         module = importlib.import_module(module_name)
         importer = getattr(module, class_name)()
         return importer
-
+    except FileNotFoundError as e:
+        logger.error(f"Error importing module: {e}")
+        raise FileNotFoundError(
+            "The folder with custom methods does not exist. Make sure to run \
+                'plugie <project_dir>' first, where <project_dir> is the root \
+                    directory of your project."
+        )
     except ImportError as e:
         logger.error(f"Error importing module: {e}")
         raise ImportError(

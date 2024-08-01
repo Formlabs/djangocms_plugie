@@ -10,8 +10,7 @@ from djangocms_plugie.methods.built_in_serializers \
 
 
 logger = logging.getLogger(__name__)
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-CUSTOM_METHODS_PATH = os.path.join(CURRENT_DIR, 'custom_methods')
+CUSTOM_METHODS_PATH = 'plugie/custom_methods'
 
 
 class MethodMapBase:
@@ -29,33 +28,40 @@ class MethodMapBase:
         path = self.custom_methods_path
         self._validate_method_name(method_name)
 
-        if path and os.path.isdir(path):
-            for filename in os.listdir(path):
-                if filename.endswith(".py"):
-                    module_path = os.path.join(path, filename)
-                    module_name = filename[:-3]
-                    spec = importlib.util.spec_from_file_location(
-                        module_name, module_path)
-                    module = importlib.util.module_from_spec(spec)
-                    try:
-                        spec.loader.exec_module(module)
-                    except Exception as e:
-                        logger.error(
-                            f"Error loading module {module_name}: {e}")
-                        continue
+        if not os.path.isdir(path):
+            logger.info(f"Custom methods directory '{path}' does not exist.")
+            raise FileNotFoundError(
+                f"Custom methods directory '{path}' does not exist. Make sure \
+                    to run 'plugie <project_dir>' first, where <project_dir> \
+                    is the root directory of your project."
+            )
 
-                    for _, obj in inspect.getmembers(module, inspect.isclass):
-                        if (
-                            issubclass(obj, MethodBase) and
-                            obj is not MethodBase
-                        ):
-                            for type_name in obj().type_names:
-                                if type_name in self.method_map:
-                                    logger.info(
-                                        f"Overriding {method_name} for \
-                                        {type_name} with {module_name}")
-                                self.method_map[type_name] = getattr(
-                                    obj, method_name)
+        for filename in os.listdir(path):
+            if filename.endswith(".py"):
+                module_path = os.path.join(path, filename)
+                module_name = filename[:-3]
+                spec = importlib.util.spec_from_file_location(
+                    module_name, module_path)
+                module = importlib.util.module_from_spec(spec)
+                try:
+                    spec.loader.exec_module(module)
+                except Exception as e:
+                    logger.error(
+                        f"Error loading module {module_name}: {e}")
+                    continue
+
+                for _, obj in inspect.getmembers(module, inspect.isclass):
+                    if (
+                        issubclass(obj, MethodBase) and
+                        obj is not MethodBase
+                    ):
+                        for type_name in obj().type_names:
+                            if type_name in self.method_map:
+                                logger.info(
+                                    f"Overriding {method_name} for \
+                                    {type_name} with {module_name}")
+                            self.method_map[type_name] = getattr(
+                                obj, method_name)
 
     def load_builtin_methods(self):
         raise NotImplementedError

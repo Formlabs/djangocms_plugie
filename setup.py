@@ -41,6 +41,11 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'plugie=djangocms_plugie.setup_script:main',
+        ],
+    },
     package_data={
         'djangocms_plugie': [
             'templates/*.html',
