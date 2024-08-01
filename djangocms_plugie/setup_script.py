@@ -3,7 +3,7 @@ import shutil
 import sys
 import argparse
 
-VERSION = '0.1.0'
+VERSION = '0.3.0'
 
 
 def setup_project(project_dir):
@@ -52,9 +52,7 @@ def show_help():
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Setup djangocms_plugie project.'
-    )
+    parser = argparse.ArgumentParser(description='Setup djangocms_plugie project.')
     parser.add_argument(
         'project_dir',
         nargs='?',

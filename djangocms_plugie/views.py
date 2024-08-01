@@ -13,21 +13,28 @@ def export_component_data(request, component_type, component_id):
 
     plugin_tree = get_plugin_tree(component_type, component_id)
 
-    serializer = Exporter()
-    version = serializer.version
-    all_plugins = serializer.serialize_plugins(plugin_tree)
-    filename = 'plugins.json'
+    try:
+        serializer = Exporter()
 
-    data = {
-        'version': version,
-        'all_plugins': all_plugins,
-    }
+        version = serializer.version
+        all_plugins = serializer.serialize_plugins(plugin_tree)
+        filename = 'plugins.json'
 
-    response = HttpResponse(json.dumps(data, indent=4, sort_keys=True),
-                            content_type="application/json")
-    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        data = {
+            'version': version,
+            'all_plugins': all_plugins,
+        }
 
-    return response
+        response = HttpResponse(json.dumps(data, indent=4, sort_keys=True),
+                                content_type="application/json")
+    except Exception as e:
+        filename = 'error.txt'
+        response = HttpResponse(str(e), content_type="text/plain")
+
+    finally:
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+        return response
 
 
 def get_plugin_tree(component_type, component_id):
@@ -38,8 +45,7 @@ def get_plugin_tree(component_type, component_id):
     filter_criteria = {'id': component_id} if component_type == 'plugin' else {
         'placeholder_id': component_id}
     parent_queryset = CMSPlugin.objects.filter(**filter_criteria)
-    descendants = parent_queryset[0].get_descendants(
-    ) if component_type == 'plugin' else CMSPlugin.objects.none()
+    descendants = parent_queryset[0].get_descendants() if component_type == 'plugin' else CMSPlugin.objects.none()
     plugin_tree = parent_queryset | descendants
 
     return plugin_tree

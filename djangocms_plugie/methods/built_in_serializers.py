@@ -19,7 +19,7 @@ def serialize_relatedmanager(instance, loader):
     return {
         "_type": "relatedmanager",
         "_model_label": instance.model._meta.label,
-        "_data": serialized_list
+        "_list": serialized_list
     }
 
 
@@ -31,7 +31,7 @@ def serialize_manyrelatedmanager(instance, loader):
 
     return {
         "_type": "manyrelatedmanager",
-        "_data": serialized_list
+        "_list": serialized_list
     }
 
 

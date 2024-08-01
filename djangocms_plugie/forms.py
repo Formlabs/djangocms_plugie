@@ -8,39 +8,74 @@ import importlib
 
 logger = logging.getLogger(__name__)
 
+class ImporterLoadingError(Exception):
+    """Error raised when the importer module cannot be loaded."""
+
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
 
 def _get_parsed_data(file_obj):
     raw = file_obj.read().decode("utf-8")
     return json.loads(raw)
 
 
-def _get_importer(version):
+def _get_importer(data):
+    version = data["import_data"]["version"]
+    major_version = _extract_major_version(version)
+    module_name = _get_module_name(major_version)
+    module = _import_module(module_name)
+    importer = _get_importer_class(module)
+
+    return importer(data=data)
+
+def _extract_major_version(version):
     try:
-        major_version = version.split(".")[0]
-        module_name = f"djangocms_plugie.version{major_version}.importer"
-        class_name = "Importer"
-        module = importlib.import_module(module_name)
-        importer = getattr(module, class_name)()
-        return importer
-    except FileNotFoundError as e:
-        logger.error(f"Error importing module: {e}")
-        raise FileNotFoundError(
-            "The folder with custom methods does not exist. Make sure to run \
-                'plugie <project_dir>' first, where <project_dir> is the root \
-                    directory of your project."
-        )
-    except ImportError as e:
-        logger.error(f"Error importing module: {e}")
-        raise ImportError(
-            f"It was not possible to import the importer for \
-                version {str(version)}. Check if the version \
-                exists or if the module is correctly implemented."
-        )
-    except AttributeError as e:
-        logger.error(f"Error importing class: {e}")
-        raise AttributeError(
-            f"File version must be in the format 'x.y.z', where x is the \
-                major version. Got: {str(version)}")
+        return version.split(".")[0]
+    except (AttributeError, IndexError) as e:
+        msg = f"Error extracting major version from {version}: {e}"
+        logger.error(msg)
+        raise ImporterLoadingError(msg)
+
+def _get_module_name(major_version):
+    return f"djangocms_plugie.version{major_version}.importer"
+    
+def _import_module(module_name):
+    try:
+        return importlib.import_module(module_name)
+    except Exception as e:
+        msg = f"Error importing module {module_name}: {e}"
+        logger.error(msg)
+        raise ImporterLoadingError(msg)
+
+def _get_importer_class(module):
+    try:
+        return getattr(module, "Importer")
+    except Exception as e:
+        msg = f"Error getting Importer class from module {module.__name__}: {e}"
+        logger.error(msg)
+        raise ImporterLoadingError(msg)
+
+    # except FileNotFoundError as e:
+    #     logger.error(f"Error importing module: {e}")
+    #     raise FileNotFoundError(
+    #         "The folder with custom methods does not exist. Make sure to run \
+    #             'plugie <project_dir>' first, where <project_dir> is the root \
+    #                 directory of your project."
+    #     )
+    # except ImportError as e:
+    #     logger.error(f"Error importing module: {e}")
+    #     raise ImportError(
+    #         f"It was not possible to import the importer for \
+    #             version {str(version)}. Check if the version \
+    #             exists or if the module is correctly implemented."
+    #     )
+    # except AttributeError as e:
+    #     logger.error(f"Error importing class: {e}")
+    #     raise AttributeError(
+    #         f"File version must be in the format 'x.y.z', where x is the \
+    #             major version. Got: {str(version)}")
 
 
 class PluginImporterForm(forms.Form):
@@ -144,13 +179,10 @@ class ImportForm(PluginImporterForm):
         if target_plugin:
             data["placeholder"] = target_plugin.placeholder
 
-        version = data["import_data"]["version"]
-        importer = _get_importer(version)
-
         try:
-            importer.import_plugins_to_target(data)
-        # TODO: refactor these errors
-        except (TypeError, IntegrityError, ValueError) as e:
+            importer = _get_importer(data)
+            importer.import_plugins_to_target()
+        except (ImporterLoadingError, TypeError, IntegrityError, ValueError) as e:
             raise TypeError(f"Error importing plugin tree: {e}")
         except Exception as e:
-            raise Exception(f"Error importing plugin tree: {e}")
+            raise Exception(f"An unexpected error occurred: {e}")

@@ -2,8 +2,9 @@ from django.apps import apps
 from djangocms_plugie.version0.utils import handle_special_plugin_fields
 
 
-def deserialize_relatedmanager(instance, importer, **kwargs):
+def deserialize_relatedmanager(importer, **kwargs):
     model_label = kwargs.get('_model_label', None)
+    instance = kwargs.get('_list', None)
     plugin = kwargs.get('_plugin_id', None)
     created_instances = []
     if model_label is not None and plugin is not None:
@@ -19,8 +20,9 @@ def deserialize_relatedmanager(instance, importer, **kwargs):
     return created_instances
 
 
-def deserialize_manyrelatedmanager(instance, importer, **kwargs):
+def deserialize_manyrelatedmanager(importer, **kwargs):
     instances = []
+    instance = kwargs.get('_list', None)
     plugin_id = kwargs.get('_plugin_id', None)
     for instance_data in instance:
         fields = {'key': instance_data}
@@ -31,11 +33,11 @@ def deserialize_manyrelatedmanager(instance, importer, **kwargs):
 
 
 def register_deserializers(importer):
-    def relatedmanager_deserializer(instance, **kwargs):
-        return deserialize_relatedmanager(instance, importer, **kwargs)
+    def relatedmanager_deserializer(**kwargs):
+        return deserialize_relatedmanager(importer, **kwargs)
 
-    def manyrelatedmanager_deserializer(instance, **kwargs):
-        return deserialize_manyrelatedmanager(instance, importer, **kwargs)
+    def manyrelatedmanager_deserializer(**kwargs):
+        return deserialize_manyrelatedmanager(importer, **kwargs)
 
     importer.method_map['relatedmanager'] = relatedmanager_deserializer
     importer.method_map['manyrelatedmanager'] = manyrelatedmanager_deserializer

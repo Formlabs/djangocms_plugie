@@ -4,7 +4,7 @@ from django.urls import reverse
 
 
 @plugin_pool.register_plugin
-class PluginImporter(CMSPluginBase):
+class Plugie(CMSPluginBase):
     system = True
     render_plugin = False
 
@@ -41,12 +41,10 @@ class PluginImporter(CMSPluginBase):
 def plugin_menu_item(operation, component_type, id):
 
     if operation not in ('export', 'import'):
-        raise ValueError("Invalid operation. \
-                         Operation must be 'export' or 'import'.")
+        raise ValueError("Invalid operation. Operation must be 'export' or 'import'.")
 
     if component_type not in ('plugin', 'placeholder'):
-        raise ValueError("Invalid component type. \
-                         Component type must be 'plugin' or 'placeholder'.")
+        raise ValueError("Invalid component type. Component type must be 'plugin' or 'placeholder'.")
 
     label = f"{operation.capitalize()} Plugins"
     action = "modal" if operation == "import" else "none"

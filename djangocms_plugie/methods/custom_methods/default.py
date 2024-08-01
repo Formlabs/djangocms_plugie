@@ -7,12 +7,11 @@ class ParentRelatedFieldSerializer(MethodBase):
     @staticmethod
     def serialize():
         return {
-            "_type": "_parent_related_field",
-            "_data": None
+            "_type": "_parent_related_field"
         }
 
     @staticmethod
-    def deserialize(_, **kwargs):
+    def deserialize(**kwargs):
         plugin_id = kwargs.get('_plugin_id', None)
         return plugin_id
 
