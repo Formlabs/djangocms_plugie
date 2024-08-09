@@ -1,5 +1,5 @@
 from django.apps import apps
-from djangocms_plugie.version0.utils import handle_special_plugin_fields
+from djangocms_plugie.importer.version0.utils import handle_special_plugin_fields
 
 
 def deserialize_relatedmanager(importer, **kwargs):

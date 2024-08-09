@@ -8,6 +8,7 @@ import importlib
 
 logger = logging.getLogger(__name__)
 
+
 class ImporterLoadingError(Exception):
     """Error raised when the importer module cannot be loaded."""
 
@@ -30,6 +31,7 @@ def _get_importer(data):
 
     return importer(data=data)
 
+
 def _extract_major_version(version):
     try:
         return version.split(".")[0]
@@ -38,9 +40,11 @@ def _extract_major_version(version):
         logger.error(msg)
         raise ImporterLoadingError(msg)
 
+
 def _get_module_name(major_version):
-    return f"djangocms_plugie.version{major_version}.importer"
-    
+    return f"djangocms_plugie.importer.version{major_version}.importer"
+
+
 def _import_module(module_name):
     try:
         return importlib.import_module(module_name)
@@ -48,6 +52,7 @@ def _import_module(module_name):
         msg = f"Error importing module {module_name}: {e}"
         logger.error(msg)
         raise ImporterLoadingError(msg)
+
 
 def _get_importer_class(module):
     try:

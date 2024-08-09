@@ -2,11 +2,12 @@ import logging
 from cms.api import add_plugin, _verify_plugin_type
 from django.db import transaction
 from cms.plugin_pool import plugin_pool
-from djangocms_plugie.version0.utils import handle_special_plugin_fields
+from djangocms_plugie.importer.version0.utils import handle_special_plugin_fields
 
 logger = logging.getLogger(__name__)
 ALL_CHILDREN_ALLOWED = object()
 ALL_PARENTS_ALLOWED = object()
+
 
 class InvalidPluginError(Exception):
     """Raised when an error occurs during plugin import."""
@@ -14,11 +15,13 @@ class InvalidPluginError(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+
 class PluginCreationError(Exception):
     """Raised when an error occurs during plugin creation."""
 
     def __init__(self, message):
         super().__init__(message)
+
 
 class PluginContext:
     def __init__(self, plugin_fields, placeholder, plugin_map, root_target_plugin=None):
@@ -68,7 +71,7 @@ class PluginContext:
     @property
     def source_id(self):
         return self.meta.get("id")
-    
+
     def _get_target_plugin(self, root_target_plugin, plugin_map):
         return root_target_plugin if self.is_root_plugin else plugin_map[self.parent_id]
 
@@ -82,8 +85,8 @@ class PluginContext:
 
     def _validate_child(self):
         allowed_children = self._get_allowed_children()
-        is_valid =  ALL_CHILDREN_ALLOWED in allowed_children or self.plugin_type in allowed_children
-    
+        is_valid = ALL_CHILDREN_ALLOWED in allowed_children or self.plugin_type in allowed_children
+
         if is_valid:
             return
 
@@ -93,8 +96,9 @@ class PluginContext:
 
     def _validate_parent(self):
         allowed_parents = self._get_allowed_parents()
-        is_valid = ALL_PARENTS_ALLOWED in allowed_parents or getattr(self.target_plugin, 'plugin_type', None) in allowed_parents
-        
+        is_valid = ALL_PARENTS_ALLOWED in allowed_parents or getattr(
+            self.target_plugin, 'plugin_type', None) in allowed_parents
+
         if is_valid:
             return
 
@@ -114,7 +118,7 @@ class PluginContext:
 
         if self.target_plugin is None or child_classes is None:
             return [ALL_CHILDREN_ALLOWED]
-        
+
         return child_classes
 
     def _get_allowed_parents(self):
@@ -150,7 +154,6 @@ class PluginContext:
 
             return new_plugin
 
-
     def _filter_fields(self):
         """
         Filters the fields from the import file between relation and non-relation fields.
@@ -172,7 +175,7 @@ class PluginContext:
                 continue
             non_relation_fields[key] = value
         return non_relation_fields, relation_fields
-    
+
     def _add_plugin(self, **kwargs):
         """
         Adds a plugin to the placeholder / target plugin and returns it.
@@ -198,8 +201,9 @@ class PluginContext:
         Related managers are not needed for the creation of the instance and 
         are handled after the instance creation to ensure a relation can be made.
         """
-        return isinstance(value, dict) and value.get('_type') == 'relatedmanager'
-    
+        related_types = ['relatedmanager', 'manyrelatedmanager']
+        return isinstance(value, dict) and value.get('_type') in related_types
+
     def _key_exists_in_model(self, key, model_fields):
         """
         Checks if the key is present in the model fields.

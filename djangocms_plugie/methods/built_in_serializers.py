@@ -13,7 +13,7 @@ def serialize_relatedmanager(instance, loader):
     serialized_list = []
     related_field_name = instance.field.name
     for item in instance.all():
-        serialized_list.append(loader.exporter.serialize_plugin(
+        serialized_list.append(loader.exporter.plugin_serializer.serialize_plugin(
             item, parent_related_field=related_field_name))
 
     return {
