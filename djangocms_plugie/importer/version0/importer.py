@@ -1,5 +1,5 @@
 import logging
-
+from djangocms_plugie.config import Config
 from djangocms_plugie.importer.version0.plugin_context import PluginContext
 from djangocms_plugie.methods.method_map import ImporterMethodMap
 
@@ -28,9 +28,7 @@ class Importer:
         self.logger = logger or Logger()
         self.version = "0.3.0"
         self.method_map = ImporterMethodMap().method_map
-        self.dummy_plugins = [
-            'Module',
-        ]
+        self.dummy_plugins = Config().get_dummy_plugins_source()
         self.data = data
         self.plugin_map = {}
 

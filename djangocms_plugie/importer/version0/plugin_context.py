@@ -30,6 +30,7 @@ class PluginContext:
         self.plugin_fields = plugin_fields
         self.is_root_plugin = self._is_root_plugin(plugin_map)
         self.target_plugin = self._get_target_plugin(root_target_plugin, plugin_map)
+        self.dummy_plugins_target = Config().get_dummy_plugins_target()
         self._validate()
 
     @property
@@ -133,7 +134,12 @@ class PluginContext:
             raise Exception(f"Can't get allowed parents for type '{self.plugin_type}'. Error: {e}")
 
     def create_dummy_plugin(self):
-        self.plugin_type = Config().get_dummy_plugins()
+        try:
+            self.plugin_type = self.dummy_plugins_target
+        except Exception as e:
+            msg = f"Failed to create dummy plugin: {e}"
+            logger.error(msg)
+            raise PluginCreationError(msg)
         return self._add_plugin()
 
     def create_plugin(self, method_map):

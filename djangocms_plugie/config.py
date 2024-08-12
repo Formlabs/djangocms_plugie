@@ -12,8 +12,8 @@ class InvalidConfigError(Exception):
 
 class Config:
     def __init__(self):
-        self.dummy_plugins = []
-        self.skip_fields = []
+        self.dummy_plugins = {}
+        self.skip_fields = ["placeholder","cmsplugin_ptr"] # default skip fields
         self.config_file = "plugie_config.json"
         self.load_config()
 
@@ -22,8 +22,8 @@ class Config:
             with open(self.config_file, 'r') as file:
                 self.config = json.load(file)
             
-            self.dummy_plugins = self.config.get("dummy_plugins", [])
-            self.skip_fields = self.config.get("skip_fields", [])
+            self.dummy_plugins = self.config.get("dummy_plugins", {})
+            self.skip_fields += self.config.get("skip_fields", [])
         
         except FileNotFoundError:
             raise InvalidConfigError(f"Configuration file '{self.config_file}' not found. Run 'plugie <project_dir>' to set up the project.")
@@ -32,8 +32,14 @@ class Config:
            logger.warning(f"Configuration file '{self.config_file}' contains invalid JSON. Using default settings.")
            pass
 
-    def get_dummy_plugins(self):
-        return self.dummy_plugins
+    def get_dummy_plugins_source(self):
+        if isinstance(self.dummy_plugins, dict):
+            return self.dummy_plugins.get("source", [])
+        return []
+    
+    def get_dummy_plugins_target(self):
+        if isinstance(self.dummy_plugins, dict):
+            return self.dummy_plugins.get("target", None)
 
     def get_skip_fields(self):
         return self.skip_fields
