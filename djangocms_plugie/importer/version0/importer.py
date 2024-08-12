@@ -26,7 +26,7 @@ class ImportPluginsError(Exception):
 class Importer:
     def __init__(self, logger=None, data=None):
         self.logger = logger or Logger()
-        self.version = "0.3.0"
+        self.version = "0.1.0"
         self.method_map = ImporterMethodMap().method_map
         self.dummy_plugins = Config().get_dummy_plugins_source()
         self.data = data

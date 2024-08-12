@@ -4,7 +4,7 @@ from djangocms_plugie.exporter.plugin_serializer import PluginSerializer
 
 class Exporter:
     def __init__(self):
-        self.version = "0.3.0"
+        self.version = "0.1.0"
         self.exporter_method_map = ExporterMethodMap(exporter=self)
         self.plugin_serializer = PluginSerializer(self.exporter_method_map)
 

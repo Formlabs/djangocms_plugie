@@ -3,7 +3,7 @@ import shutil
 import sys
 import argparse
 
-VERSION = '0.3.0'
+VERSION = '0.1.0'
 
 
 def setup_project(project_dir):
