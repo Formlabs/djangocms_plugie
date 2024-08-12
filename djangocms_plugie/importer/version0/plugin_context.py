@@ -3,6 +3,7 @@ from cms.api import add_plugin, _verify_plugin_type
 from django.db import transaction
 from cms.plugin_pool import plugin_pool
 from djangocms_plugie.importer.version0.utils import handle_special_plugin_fields
+from djangocms_plugie.config import Config
 
 logger = logging.getLogger(__name__)
 ALL_CHILDREN_ALLOWED = object()
@@ -132,8 +133,7 @@ class PluginContext:
             raise Exception(f"Can't get allowed parents for type '{self.plugin_type}'. Error: {e}")
 
     def create_dummy_plugin(self):
-        # TODO: Decouple it
-        self.plugin_type = 'WrapperPlugin'
+        self.plugin_type = Config().get_dummy_plugins()
         return self._add_plugin()
 
     def create_plugin(self, method_map):

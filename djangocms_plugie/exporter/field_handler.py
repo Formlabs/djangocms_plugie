@@ -1,9 +1,10 @@
 from cms.models import CMSPlugin
+from djangocms_plugie.config import Config
 
 
 class FieldHandler:
     def __init__(self):
-        self.skip_fields = ['alias_reference', 'source_string', 'placeholder', 'cmsplugin_ptr']
+        self.skip_fields = Config().get_skip_fields()
         self.meta_fields = self._get_meta_field_names()
 
     def _get_meta_field_names(self):
