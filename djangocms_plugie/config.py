@@ -15,6 +15,7 @@ class Config:
         self.dummy_plugins = {}
         self.skip_fields = ["placeholder","cmsplugin_ptr"] # default skip fields
         self.config_file = "plugie_config.json"
+        self.custom_methods_path = 'plugie/custom_methods'
         self.load_config()
 
     def load_config(self):
@@ -24,6 +25,7 @@ class Config:
             
             self.dummy_plugins = self.config.get("dummy_plugins", {})
             self.skip_fields += self.config.get("skip_fields", [])
+            self.custom_methods_path = self.config.get("custom_methods_path", self.custom_methods_path)
         
         except FileNotFoundError:
             raise InvalidConfigError(f"Configuration file '{self.config_file}' not found. Run 'plugie <project_dir>' to set up the project.")
@@ -43,3 +45,6 @@ class Config:
 
     def get_skip_fields(self):
         return self.skip_fields
+    
+    def get_custom_methods_path(self):
+        return self.custom_methods_path

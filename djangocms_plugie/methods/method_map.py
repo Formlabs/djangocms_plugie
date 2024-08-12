@@ -2,6 +2,7 @@ import os
 import importlib.util
 import inspect
 import logging
+from djangocms_plugie.config import Config
 from djangocms_plugie.methods.method_base import MethodBase
 from djangocms_plugie.methods.exceptions import (
     CustomMethodsDirectoryNotFoundError,
@@ -15,14 +16,13 @@ from djangocms_plugie.methods.built_in_serializers \
 
 
 logger = logging.getLogger(__name__)
-CUSTOM_METHODS_PATH = 'plugie/custom_methods'
 
 
 class MethodMapBase:
     def __init__(
             self,
             method_name=None,
-            custom_methods_path=CUSTOM_METHODS_PATH
+            custom_methods_path=Config().get_custom_methods_path()
     ):
         self.method_map = {}
         self.method_name = method_name

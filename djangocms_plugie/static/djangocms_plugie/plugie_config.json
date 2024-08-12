@@ -3,5 +3,6 @@
         "source": [],
         "target": null
     },
-    "skip_fields": []
+    "skip_fields": [],
+    "custom_methods_path": "plugie/custom_methods"
 }
