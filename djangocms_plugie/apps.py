@@ -6,4 +6,4 @@ class PlugieConfig(AppConfig):
     verbose_name = 'Django CMS Plugins Importer/Exporter'
 
     def ready(self):
-        from djangocms_plugie.cms_plugin import Plugie  # noqa
+        from djangocms_plugie.cms_plugin import PlugiePlugin  # noqa

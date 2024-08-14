@@ -1,4 +1,4 @@
-from djangocms_plugie.methods.method_map import ExporterMethodMap
+from djangocms_plugie.methods.method_map_base import ExporterMethodMap
 from djangocms_plugie.exporter.plugin_serializer import PluginSerializer
 
 

@@ -6,7 +6,13 @@ import argparse
 VERSION = '0.1.0'
 
 
-def setup_project(project_dir):
+def setup_project(project_dir: str) -> None:
+    """"
+    Setup the project in the specified directory. This function copies the 
+    custom methods and the config file to the project directory.
+
+    :param project_dir: str, the directory of the project to setup
+    """
     project_dir = os.path.join(os.getcwd(), project_dir)
 
     if not os.path.exists(project_dir):
@@ -16,12 +22,18 @@ def setup_project(project_dir):
     plugie_dir = os.path.join(project_dir, "plugie")
     os.makedirs(plugie_dir, exist_ok=True)
 
+    # TODO: Separate these functions into different commands
     copy_config_file(project_dir)
     copy_custom_methods(plugie_dir)
 
     print(f"Setup completed successfully.")
 
-def copy_custom_methods(plugie_dir):
+def copy_custom_methods(plugie_dir: str) -> None:
+    """"
+    Copy the default custom methods to the plugie directory.
+
+    :param plugie_dir: str, the directory of the plugie app
+    """
     source_dir = os.path.join(
         os.path.dirname(__file__), "methods", "custom_methods")
 
@@ -39,7 +51,12 @@ def copy_custom_methods(plugie_dir):
     shutil.copytree(source_dir, static_dest_dir)
     print(f"Static files copied to '{static_dest_dir}' successfully.")
 
-def copy_config_file(project_dir):
+def copy_config_file(project_dir: str) -> None:
+    """
+    Copy the default config file to the project directory.
+
+    :param project_dir: str, the directory of the project to setup
+    """
     config_source = os.path.join(os.path.dirname(__file__), "static", "djangocms_plugie", "plugie_config.json")
     config_dest = os.path.join(project_dir, "plugie_config.json")
 
@@ -47,11 +64,13 @@ def copy_config_file(project_dir):
     print(f"Config file copied to '{config_dest}' successfully.")
 
 
-def show_version():
+def show_version() -> None:
+    """ Show the current version of plugie."""
     print(f"plugie version {VERSION}")
 
 
-def show_help():
+def show_help() -> None:
+    """ Show the help message for the setup script."""
     help_text = """
     Usage: plugie <command> [options]
 
@@ -63,7 +82,12 @@ def show_help():
     print(help_text)
 
 
-def main():
+def main() -> None:
+    """
+    Main function for the setup script. This function parses the command line
+    arguments and calls the appropriate function.
+    """
+
     parser = argparse.ArgumentParser(description='Setup djangocms_plugie project.')
     parser.add_argument(
         'project_dir',

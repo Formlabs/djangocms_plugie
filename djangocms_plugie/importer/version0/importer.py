@@ -1,7 +1,7 @@
 import logging
 from djangocms_plugie.config import Config
 from djangocms_plugie.importer.version0.plugin_context import PluginContext
-from djangocms_plugie.methods.method_map import ImporterMethodMap
+from djangocms_plugie.methods.method_map_base import ImporterMethodMap
 
 
 logger = logging.getLogger(__name__)

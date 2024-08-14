@@ -24,3 +24,9 @@ class ModuleLoadError(Exception):
 
     def __init__(self, module_name, error):
         super().__init__(f"Error loading module {module_name}: {error}")
+
+class LoadBuiltinMethodsError(Exception):
+    """Raised when the built-in methods cannot be loaded."""
+
+    def __init__(self, method_name, error):
+        super().__init__(f"Error importing built-in custom {method_name} methods: {error}")
