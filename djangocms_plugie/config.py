@@ -1,6 +1,7 @@
 
 import json
 import logging
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +50,7 @@ class Config:
            logger.warning(f"Configuration file '{self.config_file}' contains invalid JSON. Using default settings.")
            pass
 
-    def get_dummy_plugins_source(self) -> list[str]:
+    def get_dummy_plugins_source(self) -> List[str]:
         """
         Get the source dummy plugins from the configuration settings.
 
@@ -70,7 +71,7 @@ class Config:
         if isinstance(self.dummy_plugins, dict):
             return self.dummy_plugins.get("target", None)
 
-    def get_skip_fields(self) -> list[str]:
+    def get_skip_fields(self) -> List[str]:
         """
         Get the fields to skip when exporting plugins.
 

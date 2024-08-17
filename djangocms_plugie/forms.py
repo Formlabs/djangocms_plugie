@@ -155,7 +155,7 @@ class PluginOrPlaceholderSelectionForm(forms.Form):
         widget=forms.HiddenInput(),
     )
 
-    def clean(self) -> dict[str, Any]:
+    def clean(self) -> Dict[str, Any]:
         """
         Cleans and validates the form data, ensuring that at least one of 
         'plugin' or 'placeholder' is provided and that the selected plugin 
@@ -202,7 +202,7 @@ class ImportForm(PluginOrPlaceholderSelectionForm):
     """
     import_file = forms.FileField(required=True)
 
-    def clean(self) -> dict[str, Any]:
+    def clean(self) -> Dict[str, Any]:
         """
         Cleans and validates the import file and ensures it contains valid data 
         for importing plugins. Additionally validates the structure of the 

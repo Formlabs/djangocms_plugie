@@ -3,7 +3,7 @@ from cms.models import CMSPlugin, PlaceholderReference
 from cms.plugin_pool import plugin_pool
 from django.urls import reverse
 from django.http import HttpRequest
-from typing import Literal
+from typing import Literal, List
 
 
 @plugin_pool.register_plugin
@@ -17,7 +17,7 @@ class PlugiePlugin(CMSPluginBase):
     system = True
     render_plugin = False
 
-    def get_extra_plugin_menu_items(request: HttpRequest, plugin: CMSPlugin) -> list[PluginMenuItem]:
+    def get_extra_plugin_menu_items(request: HttpRequest, plugin: CMSPlugin) -> List[PluginMenuItem]:
         """
         Get the extra menu items for the plugin menu.
         
@@ -41,7 +41,7 @@ class PlugiePlugin(CMSPluginBase):
             for operation in ['export', 'import']
         ]
 
-    def get_extra_placeholder_menu_items(request: HttpRequest, placeholder: PlaceholderReference) -> list[PluginMenuItem]:
+    def get_extra_placeholder_menu_items(request: HttpRequest, placeholder: PlaceholderReference) -> List[PluginMenuItem]:
         """
         Get the extra menu items for the placeholder menu.
 

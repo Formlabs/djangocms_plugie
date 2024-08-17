@@ -2,7 +2,7 @@ import json
 from typing import Literal
 from cms.models import CMSPlugin
 from django.contrib import messages
-from django.db.models.query import QuerySet
+from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -47,7 +47,7 @@ def export_component_data(request: HttpRequest, component_type: Literal['plugin'
         return response
 
 
-def get_plugin_tree(component_type: Literal['plugin', 'placeholder'], component_id: int) -> QuerySet[CMSPlugin]:
+def get_plugin_tree(component_type: Literal['plugin', 'placeholder'], component_id: int) -> QuerySet:
     """
     Get the plugin tree of a given component.
 

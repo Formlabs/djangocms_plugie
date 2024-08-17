@@ -1,7 +1,6 @@
 import logging
 from typing import Any, Callable
 from djangocms_plugie.methods.built_in_serializers import register_serializers
-from djangocms_plugie.exporter import Exporter
 from djangocms_plugie.methods.method_map_base import MethodMapBase
 from djangocms_plugie.methods.exceptions import LoadBuiltinMethodsError
 
@@ -19,7 +18,7 @@ class ExporterMethodMap(MethodMapBase):
     - load_builtin_methods: Load the built-in methods
     - get_serialize_method: Get the serialize method
     """
-    def __init__(self, exporter: Exporter):
+    def __init__(self, exporter):
         """
         Initialize the ExporterMethodMap.
         
