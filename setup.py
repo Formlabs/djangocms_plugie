@@ -8,7 +8,7 @@ with open('README.md') as f:
 
 REQUIREMENTS = [
     'django-cms<3.7',
-    'requests>=2.32',
+    'requests>=2.0',
 ]
 
 
@@ -53,7 +53,7 @@ setup(
         ],
     },
     extras_require={
-        "dev": ["twine"],
+        "dev": [],
     },
     zip_safe=False,
     install_requires=REQUIREMENTS,

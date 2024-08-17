@@ -13,10 +13,8 @@ If you would like to contribute to this project, please read our [CONTRIBUTING](
 
 ## Features 
 
-- Export plugins into a JSON file
-- Add custom serializers to export custom types related to your plugins
-- Import plugins from a JSON file
-- Add custom deserializers to import custom types related to your plugins
+- Export / import plugins into / from a JSON file
+- Add custom serializers / deserializers to export /import custom types used in your plugins
 
 ## Requirements
 
@@ -65,6 +63,10 @@ You can find more information about this in the [documentation](https://github.c
 
 ## Using Plugie
 
+### Exporting Plugins
+
+![How to Export Plugins](https://github.com/Formlabs/djangocms_plugie/blob/main/media/plugie_export.gif?raw=true)
+
 1. Go to the Django CMS admin and select the page where you want to export the plugins.
 
 2. Open the structure sidebar and click the hamburger icon on the right side of the placeholder or plugin tree that you want to export.
@@ -73,17 +75,21 @@ You can find more information about this in the [documentation](https://github.c
 
 4. Check the downloaded JSON file to see the exported plugins.
 
-5. Go to the page where you want to import the plugins.
+### Importing Plugins
 
-6. Open the structure sidebar and click the hamburger icon on the right side of the placeholder or plugin tree where you want to import the plugins.
+![How to Import Plugins](https://github.com/Formlabs/djangocms_plugie/blob/main/media/plugie_import.gif?raw=true)
 
-7. Click the 'Import plugins' option.
+1. Go to the page where you want to import the plugins.
 
-8. A modal will open where you can paste the JSON file content.
+2. Open the structure sidebar and click the hamburger icon on the right side of the placeholder or plugin tree where you want to import the plugins.
 
-9. Click the 'Import' button.
+3. Click the 'Import plugins' option.
 
-10. The plugins will be imported to the selected placeholder or plugin tree.
+4. A modal will open where you can select the JSON file previously exported.
+
+5. Click the 'Import' button.
+
+6. The plugins will be imported to the selected placeholder or plugin tree.
 
 ## Documentation
 
@@ -95,4 +101,4 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 
 ## Brought to you by
-[![Formlabs logo](https://github.com/Formlabs/hackathon-slicer/blob/master/logo.png)](http://formlabs.com/)
+[![Formlabs logo](https://github.com/Formlabs/djangocms_plugie/blob/main/media/logo.png?raw=true)](http://formlabs.com/)
