@@ -1,10 +1,11 @@
-from djangocms_plugie.methods.method_map_base import ExporterMethodMap
+from djangocms_plugie.methods.exporter_method_map import ExporterMethodMap
 from djangocms_plugie.exporter.plugin_serializer import PluginSerializer
+from djangocms_plugie import __version__
 
 
 class Exporter:
     def __init__(self):
-        self.version = "0.1.0"
+        self.version = __version__
         self.exporter_method_map = ExporterMethodMap(exporter=self)
         self.plugin_serializer = PluginSerializer(self.exporter_method_map)
 

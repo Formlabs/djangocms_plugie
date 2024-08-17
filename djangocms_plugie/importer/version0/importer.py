@@ -1,7 +1,8 @@
 import logging
 from djangocms_plugie.config import Config
 from djangocms_plugie.importer.version0.plugin_context import PluginContext
-from djangocms_plugie.methods.method_map_base import ImporterMethodMap
+from djangocms_plugie.methods.importer_method_map import ImporterMethodMap
+from djangocms_plugie import __version__
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +27,7 @@ class ImportPluginsError(Exception):
 class Importer:
     def __init__(self, logger=None, data=None):
         self.logger = logger or Logger()
-        self.version = "0.1.0"
+        self.version = __version__
         self.method_map = ImporterMethodMap().method_map
         self.dummy_plugins = Config().get_dummy_plugins_source()
         self.data = data
