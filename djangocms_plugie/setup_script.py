@@ -25,6 +25,7 @@ def setup_project(project_dir: str) -> None:
     # TODO: Separate these functions into different commands
     copy_config_file(project_dir)
     copy_custom_methods(plugie_dir)
+    copy_tests(project_dir)
 
     print(f"Setup completed successfully.")
 
@@ -62,6 +63,29 @@ def copy_config_file(project_dir: str) -> None:
 
     shutil.copy(config_source, config_dest)
     print(f"Config file copied to '{config_dest}' successfully.")
+
+def copy_tests(project_dir: str) -> None:
+    """"
+    Copy the tests to the plugie directory.
+
+    :param project_dir: str, the directory of the project
+    """
+    source_dir = os.path.join(
+        os.path.dirname(__file__), "tests")
+
+    if not os.path.exists(source_dir):
+        print(f"Static directory '{source_dir}' does not exist.")
+        sys.exit(1)
+
+    static_dest_dir = os.path.join(project_dir, "plugie_tests")
+
+    if os.path.exists(static_dest_dir):
+        print(f"Static directory '{static_dest_dir}' already exists. \
+              Please remove it first.")
+        sys.exit(1)
+
+    shutil.copytree(source_dir, static_dest_dir)
+    print(f"Tests copied to '{static_dest_dir}' successfully.")
 
 
 def show_version() -> None:

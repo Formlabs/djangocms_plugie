@@ -1,0 +1,15 @@
+{
+    "all_plugins": [
+        {
+            "body": "Problem: this plugin does not exist",
+            "meta": {
+                "depth": 1,
+                "id": 1,
+                "parent": null,
+                "plugin_type": "inexisting_plugin",
+                "position": 0
+            }
+        }
+    ],
+    "version": "0.1.0"
+}

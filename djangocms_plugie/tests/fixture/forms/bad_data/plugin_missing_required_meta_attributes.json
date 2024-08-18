@@ -1,0 +1,14 @@
+{
+    "all_plugins": [
+        {
+            "problem": "Plugin is missing required meta attributes: 'plugin_type",
+            "meta": {
+                "depth": 1,
+                "id": 1,
+                "parent": null,
+                "position": 0
+            }
+        }
+    ],
+    "version": "0.1.0"
+}

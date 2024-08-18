@@ -1,2 +1,3 @@
 recursive-include djangocms_plugie/static *
 recursive-include djangocms_plugie/templates *
+recursive-include djangocms_plugie/tests *

@@ -1,0 +1,16 @@
+{
+    "all_plugins": [
+        {
+            "meta": {
+                "depth": 1,
+                "id": 1,
+                "parent": null,
+                "plugin_type": "",
+                "position": 0
+            }
+        }
+    ],
+    "version": {
+        "version_is_not_a_dict": "1.1.1"
+    }
+}

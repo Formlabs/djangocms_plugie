@@ -1,0 +1,14 @@
+{
+    "all_plugins": [
+        {
+            "meta": {
+                "depth": 1,
+                "id": 1,
+                "parent": null,
+                "plugin_type": "",
+                "position": 0
+            }
+        }
+    ],
+    "version": "999.999.999"
+}
