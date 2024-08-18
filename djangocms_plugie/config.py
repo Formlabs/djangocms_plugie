@@ -44,7 +44,8 @@ class Config:
             self.custom_methods_path = self.config.get("custom_methods_path", self.custom_methods_path)
         
         except FileNotFoundError:
-            raise InvalidConfigError(f"Configuration file '{self.config_file}' not found. Run 'plugie <project_dir>' to set up the project.")
+            logger.warning(f"Configuration file '{self.config_file}' not found. Using default settings.")
+            pass
         
         except json.JSONDecodeError:
            logger.warning(f"Configuration file '{self.config_file}' contains invalid JSON. Using default settings.")
