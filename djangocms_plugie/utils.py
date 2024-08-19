@@ -5,7 +5,7 @@ from typing import Dict, IO, Any, Type
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 
-REQUIRED_META_KEYS = {"parent", "id", "position", "plugin_type", "depth"}
+REQUIRED_META_KEYS = {"parent", "id", "position", "plugin_type"}
 
 class ImporterLoadingError(Exception):
     """Error raised when the importer module cannot be loaded."""

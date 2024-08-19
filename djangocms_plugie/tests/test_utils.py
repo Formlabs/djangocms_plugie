@@ -91,7 +91,7 @@ class TestValidateAllPlugins(unittest.TestCase):
 
     def test_valid_plugins(self):
         all_plugins = [
-            {"meta": {"parent": None, "id": 1, "position": 0, "plugin_type": "TextPlugin", "depth": 0}}
+            {"meta": {"parent": None, "id": 1, "position": 0, "plugin_type": "TextPlugin"}}
         ]
         try:
             validate_all_plugins(all_plugins)
@@ -111,7 +111,7 @@ class TestValidateAllPlugins(unittest.TestCase):
 class TestValidatePluginMeta(unittest.TestCase):
 
     def test_valid_plugin_meta(self):
-        plugin = {"meta": {"parent": None, "id": 1, "position": 0, "plugin_type": "TextPlugin", "depth": 0}}
+        plugin = {"meta": {"parent": None, "id": 1, "position": 0, "plugin_type": "TextPlugin"}}
         try:
             validate_plugin_meta(plugin, REQUIRED_META_KEYS)
         except ValidationError:

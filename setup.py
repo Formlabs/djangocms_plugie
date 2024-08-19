@@ -7,7 +7,7 @@ with open('README.md') as f:
     long_description = f.read()
 
 REQUIREMENTS = [
-    'django-cms<3.7',
+    'django-cms>=3.7',
     'requests>=2.0',
 ]
 
