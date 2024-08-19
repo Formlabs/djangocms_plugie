@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 ```python
 urlpatterns = [
     ...
-    url(r'^admin/', include('djangocms_plugie.urls')),
+    path('admin/', include('djangocms_plugie.urls')),
     ...
 ]
 ```
