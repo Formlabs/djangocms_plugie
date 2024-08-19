@@ -2,8 +2,7 @@ import os
 import shutil
 import sys
 import argparse
-
-VERSION = '0.1.0'
+from djangocms_plugie import __version__ as VERSION
 
 
 def setup_project(project_dir: str) -> None:
