@@ -3,7 +3,6 @@
         {
             "body": "Problem: this plugin does not exist",
             "meta": {
-                "depth": 1,
                 "id": 1,
                 "parent": null,
                 "plugin_type": "inexisting_plugin",

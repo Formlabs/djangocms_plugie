@@ -86,13 +86,7 @@ class Importer:
             return plugins
 
         try:
-            return sorted(
-                plugins,
-                key=lambda p: (
-                    p.get("meta").get("depth", 1),
-                    p.get("meta").get("position", 0)
-                )
-            )
+            return sorted(plugins, key=lambda p: (p.get("meta").get("position", 0)))
         except Exception as e:
             msg = f"Failed to sort plugins: {e}"
             self.logger.info(msg)
