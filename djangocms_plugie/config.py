@@ -23,7 +23,7 @@ class Config:
     """
     def __init__(self):
         self.dummy_plugins = {}
-        self.skip_fields = ["placeholder","cmsplugin_ptr"] # default skip fields
+        self.skip_fields = ["placeholder","cmsplugin_ptr", "alias_reference"] # default skip fields
         self.config_file = "plugie_config.json"
         self.custom_methods_path = 'plugie/custom_methods'
         self.load_config()
