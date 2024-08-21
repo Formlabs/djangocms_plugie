@@ -7,7 +7,7 @@ with open('README.md') as f:
     long_description = f.read()
 
 REQUIREMENTS = [
-    'django-cms>=3.7',
+    'django-cms>=4.1',
     'requests>=2.0',
 ]
 
@@ -19,11 +19,11 @@ CLASSIFIERS = [
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
     'Programming Language :: Python',
-    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.12',
     'Framework :: Django',
-    'Framework :: Django :: 1.11',
+    'Framework :: Django :: 5.0',
     'Framework :: Django CMS',
-    'Framework :: Django CMS :: 3.6',
+    'Framework :: Django CMS :: 4.1',
 ]
 
 
